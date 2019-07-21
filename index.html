@@ -13,7 +13,7 @@
         <div class="container">
           <div class="row">
             <div class="col-5">
-              <form class="mission" action="">
+              <div class="mission">
                 <input
                   class="mission_input"
                   :class="{placeCH:time==0}"
@@ -22,8 +22,8 @@
                   v-model="text"
                   @keyup.enter="inputHandler"
                 />
-                <button :class="{textCH:time==0}" @click="inputHandler">＋</button>
-              </form>
+                <button type="button" :class="{textCH:time==0}" @click.prevent="inputHandler">＋</button>
+              </div>
               <div class="working">
                 <button class="work_check" @click="changeToDoneing($event)"></button>
                 <div class="work_task">
@@ -161,7 +161,7 @@
               </div>
               <div class="col-5 offset-1">
                 <div class="to_do_list" v-show="toDoList">
-                  <form class="mission" action="">
+                  <div class="mission">
                     <input
                       class="mission_input"
                       :class="{placeCH:time==0}"
@@ -170,8 +170,8 @@
                       v-model="text"
                       @keyup.enter="inputHandler"
                     />
-                    <button :class="{textCH:time==0}" @click="inputHandler">＋</button>
-                  </form>
+                    <button type="button" :class="{textCH:time==0}" @click="inputHandler">＋</button>
+                  </div>
                   <div class="task_all">
                     <div class="todo">
                       <div class="todo_bar">
@@ -884,14 +884,16 @@
                 page(e){ //傳入true,false開關頁面
                     this.popup=e;
                 },
-                inputHandler(){  //加入todo事項
+                inputHandler(event){  //加入todo事項
                     if(this.text){
                         if(this.doing.length==0){
                             this.doing.push(this.text)
                         }else{
                             this.todo.push(this.text)
                         }
-                        this.text=''
+                        this.text='';
+                        event.returnValue = false;
+                        return false;
                     }
                 },
                 cancelTask(event){   //刪除當前點擊的元素(todo事項)
@@ -1034,12 +1036,18 @@
                     this.ringNumber2=i;
                     music.currentTime = 0;
                     music.play();
+                },
+                checkInfo(event,self){
+                    if (event.keyCode == 13) {
+                        event.cancleBubble = true;
+                        event.returnValue = false;
+                        return false;
+                    }
                 }
             }
             //*********之後修產生空陣列的bug，目前只是把最後一項鎖住而已
             //*********剩下計算蘋果數量功能
         })
-
 
 
       var ctx = document.getElementById("myChart");
