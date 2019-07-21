@@ -1,0 +1,1015 @@
+//******color********
+$primary-color:#FF4384;
+$secondary-color:#00A7FF;
+$global-color:#003164;
+$primary-bg-color:#FFEDF7;
+$secondary-bg-color:#E5F3FF;
+$text-color:#ffffff;
+
+%wh-100{width: 100%;height: 100%;}
+%col{position: relative;
+    width:100%;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+
+//**********text-style********
+@import url('/fonts/Roboto/Roboto-Bold.ttf');
+@import url('/fonts/Roboto/Roboto-BoldItalic.ttf');
+@import url('/fonts/Muli/Muli-Bold.ttf');
+
+%roboto_B166{font-family: 'Roboto';font-size: 166px;font-weight: 800;text-align: center;}
+%roboto_IB16{font-family: 'Roboto';font-size: 16px;font-weight: 800;font-style: italic;text-align: center;}
+%roboto_B24{font-family: 'Roboto';font-size: 24px;font-weight: 800;text-align: center;}
+%roboto_B16{font-family: 'Roboto';font-size: 16px;font-weight: 800;text-align: center;}
+%roboto_B32{font-family: 'Roboto';font-size: 32px;font-weight: 800;text-align: left;}
+%roboto_B64{font-family: 'Roboto';font-size: 64px;font-weight: 800;text-align: center;}
+%muli_B24{font-family: 'Muli';font-size: 24px;font-weight: 800;text-align: center}
+
+
+
+//*********global*********
+*{
+    box-sizing: border-box;
+    font-family: 'Roboto','Muli',Arial, Helvetica, sans-serif;
+    color: $global-color;
+}
+html,body{
+	margin: 0;
+    padding: 0;
+}
+a,span{
+    display: inline-block;
+    text-decoration: none;
+    text-transform:uppercase;
+    &:hover{
+        text-decoration: none;
+    }
+}
+input,button{
+    display: inline-block;
+    padding: 0;
+    cursor:pointer;
+    border:none;
+    &:focus{outline:none;}
+    background-color: transparent;
+}
+
+
+
+
+//*********grid**********
+.wrapper{
+    width: 1280px;
+    height: 800px;
+    margin: 0 auto; 
+    margin-top: 50px;
+}
+.bg_1{
+    position: relative;
+    @extend %wh-100;
+    background-color: $primary-bg-color;
+    &:before{
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 100%;
+        width: 450px / 1280px * 100%;
+        background-color: $global-color;
+    }
+}
+.container {
+    width: 100%;
+    height: 100%;
+    padding-right: 85px;
+    padding-left: 85px;
+    margin-right: auto;
+    margin-left: auto;
+}
+.row {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+    height: 100%;
+}
+.col-1{
+    @extend %col;
+    -ms-flex: 0 0 8.333333%;
+    flex: 0 0 8.333333%;
+    max-width: 8.333333%;
+}
+.col-4{
+    @extend %col;
+    -ms-flex: 0 0 33.333333%;
+    flex: 0 0 33.333333%;
+    max-width: 33.333333%;
+}
+.col-5{
+    @extend %col;
+    -ms-flex: 0 0 41.666667%;
+    flex: 0 0 41.666667%;
+    max-width: 41.666667%;
+}
+.col-6{
+    @extend %col;
+    -ms-flex: 0 0 50%;
+    flex: 0 0 50%;
+    max-width: 50%;
+}
+.offset-1 {
+    margin-left: 8.333333%;
+}
+
+
+//*********main-funtion*********
+.mission{
+    position: relative;
+    width: 100%;
+    height: 56px;
+    margin-top: 48px;
+    background-color: $text-color;
+    .mission_input{
+        height: 19px;
+        width: 320px;
+        margin-top: 19px;
+        margin-left: 16px;
+        @extend %roboto_B16;
+        color: $global-color;
+        text-align: left;
+        &::-webkit-input-placeholder{@extend %roboto_IB16;text-transform:uppercase;color: $primary-color;text-align: left;}
+        &::placeholder{@extend %roboto_IB16;text-transform:uppercase;color: $primary-color;text-align: left;}
+    }
+    button{
+        @extend %roboto_B16;
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        width: 24px;
+        height: 24px;
+        line-height: 20px;
+        color: $primary-color;
+        font-size: 20px;
+    }
+}
+
+//*********working*********
+.working{
+    margin-top: 145px;
+    width: 100%;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    .work_check{
+        display: inline-block;
+        width: 48px;
+        height: 48px;
+        border: 2px solid $global-color;
+        border-radius: 50%;
+        margin-right: 16px;
+    }
+    .work_task{
+        height: 48px;;
+        width: 380px;
+        span{
+            height: 28px;
+            @extend %roboto_B24;
+            color: $global-color;
+            letter-spacing: -0.2px;
+            line-height: 28px;
+        }
+    }
+}
+.tomato_bar{
+    margin-top: 8px;
+    @extend %wh-100;
+    .tomato{
+        width: 12px;
+        height: 12px;
+        border: 1px solid $primary-color;
+        border-radius: 50%;
+    }
+}
+.time{
+    width: 100%;
+    height: 206px;
+    span{
+        line-height: 206px;
+        @extend %roboto_B166;
+        color: $primary-color;
+    }
+}
+
+//*********task**********
+.task_list{
+    margin-top: 60px;
+    width: 100%;
+    .task_box{
+        width: 100%;
+        height: 144px;
+        overflow: auto;
+        .task_bar{
+        margin-top: 4px;
+        width: 100%;
+        height: 32px;
+        display: flex;
+        border-bottom: 1px solid rgb(0, 49, 100,.2);
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        }
+    }
+}
+.check_div{
+    width: 24px;
+    height: 24px;
+    padding: 2px;
+    .check{
+        @extend %wh-100;
+        color: $global-color;
+        border: 1.5px solid;
+        border-radius: 50%;
+    }
+}
+.task{
+    height: 19px;
+    margin-left: 4px;
+    text-transform:uppercase;
+    @extend %roboto_B16;
+    text-align: left;
+    line-height: 19px;
+    flex-grow: 5;
+}
+.start{
+    height: 24px;
+    width: 24px;
+    padding: 1px;
+    .icon{
+        @extend %wh-100;
+        border: 1.5px solid $global-color;
+        border-radius: 50%;
+        background-image: url(/icon/baseline-play_arrow-24px.svg);
+        background-size:18px;
+        background-position:50% 50%;
+    }
+}
+.extend_div{
+    margin-top: 9px;
+    width: 100%;
+    text-align: right;
+    margin-bottom: auto;
+    .more{
+        height: 19px;
+        // width:44px;
+        @extend %roboto_B16;
+        text-transform:uppercase;
+        color: $primary-color;
+        cursor: pointer;
+    }
+}
+
+//********clock*********
+.clock_box{
+    @extend %wh-100;
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    .clock{
+        position: relative;
+        width: 540px;
+        height: 540px;
+        background-color:$primary-color;
+        border-radius: 50%;
+        border: 4px solid $primary-color;
+        background: radial-gradient(circle at center, $primary-color 67%, transparent 67%);
+        .play_stop_box{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 96px;
+            height: 96px;
+            transform: translate(-50%,-50%);
+            padding: 2px;
+            animation: heartbeat 1.5s infinite;
+            .play_stop{
+                @extend %wh-100;
+                background-color: $text-color;
+                border-radius: 50%;
+                padding: 10px;
+                .svg{
+                    @extend %wh-100;
+                    background-color: rgba($primary-color,1);
+                    mask-repeat: no-repeat;
+                    mask-position: center;
+                    mask-size:66px;
+                    -webkit-mask-repeat: no-repeat;
+                    -webkit-mask-position: center;
+                    -webkit-mask-size: 66px;
+                }
+            }
+        }
+        .cancel_box{
+            position: absolute;
+            top: 290px;
+            right: 194px;
+            width: 24px;
+            height: 24px;
+            padding: 6px;
+            .cancel{
+                @extend %wh-100;
+                background-color: $text-color;
+            }
+            .cancelCG{
+                background-color: $primary-color;
+            }
+        }
+    }
+    .clockCG{
+        background-color: $text-color;
+        background: radial-gradient(circle at center, $text-color 66%, $primary-color 66%, $primary-color 67%,transparent 67%);
+        .playboxCG{
+            animation: none;
+            .playstopCG{
+                background-color: $primary-color;
+                .svgCG{
+                    background-color: rgba($text-color,1);
+                    -webkit-mask-image: url(icon/baseline-pause-24px.svg)!important;
+                    mask-image: url(icon/baseline-pause-24px.svg)!important;
+                }
+            }
+        }
+    }
+}
+.fillTime{
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    fill: none;
+    circle{
+        stroke-width: 20;
+        stroke:$primary-color;
+        stroke-dasharray: 1634;
+        transform-origin: center;
+        transform: rotate(-90deg);
+        &.circleCH{
+            stroke: $secondary-color;
+        }
+    }
+}
+
+
+//***clock***
+.breakStatus{
+    border-color: $secondary-color!important;
+    background-color: $secondary-color!important;
+    background: radial-gradient(circle at center, $secondary-color 67%,transparent 67%)!important;
+}
+.breakStatus.pauseClock{
+    background-color: $text-color!important;
+    background: radial-gradient(circle at center, $text-color 66%, $secondary-color 66%, $secondary-color 67%,transparent 67%)!important;
+}
+//***playstop***
+.break{
+    background-color: $text-color!important;
+}
+.break.pausePlay{
+    background-color: $secondary-color!important;
+}
+//***svg***
+.breakSvg{
+    background-color: rgba($secondary-color,1)!important;
+    -webkit-mask-image: url(icon/baseline-play_arrow-white-24px.svg)!important;
+    mask-image: url(icon/baseline-play_arrow-white-24px.svg)!important;
+}
+.breakSvg.pauseSvg{
+    background-color: rgba($text-color,1)!important;
+    -webkit-mask-image: url(icon/baseline-pause-24px.svg)!important;
+    mask-image: url(icon/baseline-pause-24px.svg)!important;
+}
+//***cancel***
+.breakCancel{
+    background-color: $text-color!important;
+}
+.breakCancel.pauseCancel{
+    background-color: $secondary-color!important;
+}
+@keyframes heartbeat{
+    0%{transform: translate(-50%,-50%) scale(1);}
+    40%{transform: translate(-50%,-50%)scale(1.2);}
+    100%{transform: translate(-50%,-50%)scale(1);}
+}
+//*********navbox**********
+.nav_box{
+    position: relative;
+    height: 100%;
+    width: 36px;
+    margin-left: 65px - 36px ;
+    padding-top: 48px;
+    .icon{
+        display: block;
+        height: 36px;
+        width: 100%;
+        margin-bottom: 48px;
+        background-position: 0 0;
+        background-size: cover;
+        cursor: pointer;
+    }
+    span{
+        position: absolute;
+        @extend %muli_B24;
+        transform: rotate(90deg);
+        color: $text-color;
+        right: -82.5px + 15.5px;
+        bottom: 112px;
+        height: 31px;
+        width: 165px;
+        line-height: 31px;
+        z-index: 10;
+    }
+}
+
+// ***********popup***********
+.popuppage{
+    position: absolute;
+    background-color: $global-color;
+    @extend %wh-100;
+    top: 0;
+    left: 0;
+}
+#popup:target{
+    opacity: 1;
+    visibility: visible;    
+}
+.col-4{
+    padding-top: 45px;
+}
+.popup_nav{
+    display: flex;
+    margin-bottom: 42px;
+    width: 100%;
+    height: 42px;
+    text-align: left;
+    align-items: center;
+    .icon{
+        display: inline-block;
+        padding: 3px 0 ;
+        width: 36px;
+        height: 42px;
+        background-color: rgba($text-color,0.4);
+        mask-repeat: no-repeat;
+        mask-position: center;
+        -webkit-mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+    }
+    .title{
+        height: 100%;
+        margin-left: 8px;
+        line-height: 42px;
+        @extend %roboto_B32;
+        color: rgba($text-color,0.4);
+    }
+}
+.active{
+    .icon{
+        background-color: rgba($primary-color,1);
+    }
+    .title{
+        color: rgba($primary-color,1);
+    }
+}
+.breakAct.active{
+    .icon{
+        background-color: $secondary-color;
+    }
+    .title{
+        color: $secondary-color;
+    }
+}
+
+// **********popup_clock*********
+.small_clock_box{
+    position: absolute;
+    width: 350px;
+    height: 175px;
+    background-color: $primary-bg-color;
+    bottom: 0;
+    .small_time{
+        position: absolute;
+        height: 75px;
+        line-height: 75px;
+        @extend %roboto_B64;
+        color: $primary-color;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 43px;
+    }
+    .task{
+        position: absolute;
+        height: 19px;
+        line-height: 19px;
+        @extend %roboto_B16;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 24px;
+        width: 340px;
+    }
+
+}
+.breakSmall{
+    background-color: $secondary-bg-color;
+    .small_time{
+        color: $secondary-color;
+    }
+}
+.small_clock{
+    height: 104px;
+    width: 104px;
+    position: absolute;
+    left: 137px;
+    bottom:123px;
+    background-color:$primary-color;
+    border-radius: 50%;
+    border: 2px solid $primary-color;
+    background: radial-gradient(circle at center, $primary-color 62%, transparent 62%);
+    animation: heartbeat2 1.5s infinite;
+    .play_stop_box{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 96px;
+        height: 96px;
+        transform: translate(-50%,-50%);
+        padding: 6px;
+        .play_stop{
+            @extend %wh-100;
+            border-radius: 50%;
+            padding: 10px;
+            .svg{
+                @extend %wh-100;
+                background-color: rgba($text-color,1);
+                mask-repeat: no-repeat;
+                mask-position: center;
+                mask-size:66px;
+                -webkit-mask-repeat: no-repeat;
+                -webkit-mask-position: center;
+                -webkit-mask-size: 66px;
+                -webkit-mask-image: url(icon/baseline-play_arrow-24px.svg);
+                mask-image: url(icon/baseline-play_arrow-24px.svg);
+
+            }
+       }
+    }
+}
+.small_fill{
+    position: absolute;
+    left: 137px;
+    bottom:123px;
+    fill: none;
+    animation: heartbeat2 1.5s infinite;
+    &.push{
+        animation: none;
+    }
+    circle{
+        stroke-width: 12;
+        stroke:$primary-color;
+        stroke-dasharray: 289;
+        transform-origin: center;
+        transform: rotate(-90deg);
+        &.circleCH{
+            stroke: $secondary-color;
+        }
+    }
+}
+.pauseSM{
+    animation: none;
+    background: radial-gradient(circle at center,$primary-color 62%, transparent 62%);
+    .play_stop_box{
+        .play_stop{
+            .svg{
+                -webkit-mask-image: url(icon/baseline-pause-24px.svg);
+                mask-image: url(icon/baseline-pause-24px.svg);
+            }
+        }
+    }
+}
+.breakSM{
+    background-color:$secondary-color;
+    border-color: $secondary-color;
+    background: radial-gradient(circle at center, $secondary-color 62%, transparent 62%);    
+}
+
+@keyframes heartbeat{
+    0%{transform: translate(-50%,-50%) scale(1);}
+    40%{transform: translate(-50%,-50%)scale(1.2);}
+    100%{transform: translate(-50%,-50%)scale(1);}
+}
+@keyframes heartbeat2{
+    0%{transform:scale(1);}
+    40%{transform:scale(1.1);}
+    100%{transform:scale(1);}
+}
+
+//*******close*******
+.close{
+    position: relative;
+    right: 0;
+    display: block;
+    margin-top: 48px;
+    width: 48px;
+    height: 48px;
+    margin-left: auto;
+    cursor: pointer;
+    &::before,
+    &::after{
+        content: "";
+        position: absolute;
+        width: 40px;
+        height: 4px;
+        background-color: $text-color;
+        top: 50%;
+        left: 50%;
+        border-radius: 2px;
+    }
+    &::before{
+        transform: translate(-50%,-50%) rotate(-45deg);
+    }
+    &::after{
+        transform: translate(-50%,-50%) rotate(45deg);
+    }
+}
+
+
+//************to_do_list************
+.to_do_list{
+    position: absolute;
+    height: 100%;
+    width: 445px;
+    top:0;
+    left:15px;
+}
+.task_all{
+    margin-top: 48px;
+    width: 100%;
+    height: 800px - 48px * 2- 56px;
+}
+.todo{
+    width: 100%;
+    overflow: hidden;
+    .todo_bar{
+        width: 100%;
+        height: 51px;
+        background-color: rgba($text-color,0.2);
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 7px solid $global-color;
+        .title{
+            @extend %roboto_B24;
+            color: $text-color;
+            height: 100%;
+            line-height: 44px;
+            margin-left: 16px;
+        }
+        .toggle{
+            width:44px;
+            height: 44px;
+            background-size: 16px;
+            background-position: 50% 50%;
+            background-repeat: no-repeat;
+            transform: rotate(90deg);
+        }
+    }
+}
+.todo_box,.done_box{
+    width: 100%;
+    height: 0px;
+    overflow: auto;
+    transition: all .5s;
+}
+.todo_task{
+    margin-top: 9px;
+    height: 33px;
+    width: 100%;
+    border-bottom: 1px solid rgba($text-color,0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .check{
+        border-color: $text-color;
+    }
+    .task{
+        color: $text-color;
+    }
+    .icon{
+        background-image: url(/icon/baseline-play_arrow-white-24px.svg);
+        border:2px solid $text-color;
+    }
+
+}
+
+//******done_list******
+.done{
+    margin-top: 24px;
+    width: 100%;
+    overflow: hidden;
+    .done_bar{
+        width: 100%;
+        height: 51px;
+        background-color: rgba($text-color,0.2);
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 7px solid $global-color;
+        .title{
+            @extend %roboto_B24;
+            color: $text-color;
+            height: 100%;
+            line-height: 44px;
+            margin-left: 16px;
+        }
+        .toggle{
+            width:44px;
+            height: 44px;
+            background-size: 16px;
+            background-position: 50% 50%;
+            background-repeat: no-repeat;
+            transform:rotate(90deg);
+        }
+    }
+}
+
+.done_task{
+    margin-top: 9px;
+    height: 33px;
+    width: 100%;
+    border-bottom: 1px solid rgba($text-color,0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .check_div{
+        width: 24px;
+        height: 24px;
+        padding: 2px;
+        .check{
+            @extend %wh-100;
+            color: $text-color;
+            border: 1.5px solid;
+            border-radius: 50%;
+            background-image: url(/icon/baseline-done-24px-white.svg);
+            background-position: 50% 50%;
+            background-size: cover;
+        }
+    }
+    .task{
+        height: 19px;
+        margin-left: 4px;
+        flex-grow: 5;
+        .title{
+            display: inline-block;
+            position: relative;
+            text-transform:uppercase;
+            @extend %roboto_IB16;
+            text-align: left;
+            line-height: 19px;
+            color: $text-color;
+            &::after{
+                position: absolute;
+                content: '';
+                width: 100%;
+                height: 3px;
+                background-color: rgba($text-color,.7);
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%,-50%);
+            }
+        }
+    }
+    .apple_group{
+        height: 19px;
+        .apple{
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: $text-color;
+            margin-left: 4px;
+        }
+    }
+}
+
+//**************analytics***************
+.analytics{
+    position: absolute;
+    height: 100%;
+    width: 445px;
+    top:0;
+    left:15px;
+    .row{
+        height: auto;
+    }
+}
+.title_bar{
+    width: 100%;
+    height: 44px;
+    margin-top: 45px;
+    background-color: rgba($text-color,0.2);
+    padding: 0 16px;
+    .title{
+        color: $text-color;
+        @extend %roboto_B24;
+        height: 44px;
+        line-height: 44px;
+    }
+}
+.today,.week{
+    display: block;
+    @extend %roboto_B16;
+    color: $text-color;
+    margin-top: 16px;
+    text-align: left;
+}
+.flex{
+    display: flex;
+    align-items: baseline;
+    .number{
+        @extend %roboto_B64;
+        color: $primary-color;
+    }
+    .text{
+        @extend%roboto_B16;
+        color: rgba($text-color,0.4)
+    }
+}
+.chart{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .title{
+        flex-grow: 4;
+        text-align: left;
+    }
+    .arrowleft,.arrowright{
+        position: relative;
+        width: 24px;
+        height: 24px;
+        &::before,
+        &::after{
+            position: absolute;
+            left: 50%;
+            content: "";
+            width: 8px;
+            height: 2px;
+            background-color: $text-color;
+        }
+    }
+    .arrowleft{
+        &::before{
+            bottom: 35%;
+            transform:translateX(-50%) rotate(45deg);
+        }
+        &::after{
+            top: 35%;
+            transform:translateX(-50%) rotate(-45deg);
+        }
+    }
+    .arrowright{
+        &::before{
+            top: 35%;
+            transform:translateX(-50%) rotate(45deg);
+        }
+        &::after{
+            bottom: 35%;
+            transform:translateX(-50%) rotate(-45deg);
+        }
+    }
+    .date{
+        width: 150px;
+        height: 24px;
+        @extend %roboto_B16;
+        color: $text-color;
+        margin: 0 8px;
+    }
+}
+
+
+//****************ringtones***************
+.ringtones{
+    position: absolute;
+    height: 100%;
+    width: 445px;
+    top:0;
+    left:15px;
+}
+.music{
+    width: 100%;
+    height: 230px;
+    margin-top: 20px;
+    .item{
+        margin-top: 16px;
+        display: flex;
+        align-items: center;
+        width:100px;
+        cursor: pointer;
+        input{
+            margin: 0;
+            background:none;
+        }
+        label{
+            color: $text-color;
+            @extend %roboto_B16;
+            text-transform: uppercase;
+            margin-left: 4px;;
+        }
+    }
+}
+.btn-radio{
+  cursor: pointer;
+  display: inline-block;
+  width: 120px;
+  -webkit-user-select: none;
+  user-select: none;
+  margin-right: 20px;
+  margin-bottom: 16px;
+  svg{
+    fill: none;
+    vertical-align: middle;
+    circle{
+      stroke-width: 2;
+      stroke: #C8CCD4;}
+    path{
+      stroke: $primary-color;
+      &.inner{
+        stroke-width: 6;
+        stroke-dasharray: 19;
+        stroke-dashoffset: 19;}
+      &.outer{
+        stroke-width: 2;
+        stroke-dasharray: 57;
+        stroke-dashoffset: 57;}
+    }
+    .breakPath{
+        stroke: $secondary-color !important;
+    }
+  }
+  input{
+    display: none;
+    &:checked + svg{
+      path{
+        transition: all .4s ease;
+        &.inner{
+          stroke-dashoffset: 38;
+          transition-delay: .3s;}
+        &.outer{
+          stroke-dashoffset: 0;}
+      }
+    }
+  }
+  span{
+    @extend %roboto_B16;
+    color: $text-color;
+    vertical-align: middle;
+  }
+}
+
+//***********changeStatus***********
+.rotate{
+    transform:rotate(-90deg)!important;
+}
+.listUP{
+    height: 252px;
+}
+
+
+.textCH{
+    color: $secondary-color!important;
+}
+.bgCH{
+    background-color: $secondary-bg-color!important;
+}
+.bgcCH{
+    background-color: $secondary-color!important;
+}
+.borderCH{
+    border-color: $secondary-color!important;
+}
+.placeCH{
+    &::-webkit-input-placeholder{color: $secondary-color !important;}
+    &::placeholder{color: $secondary-color !important;;}
+}
+
+
+
+
+
+
+
+
+
+
+
+// sass --watch stoo.scss style.css
