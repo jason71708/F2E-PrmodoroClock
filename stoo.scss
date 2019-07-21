@@ -15,9 +15,9 @@ $text-color:#ffffff;
 
 
 //**********text-style********
-@import url('/fonts/Roboto/Roboto-Bold.ttf');
-@import url('/fonts/Roboto/Roboto-BoldItalic.ttf');
-@import url('/fonts/Muli/Muli-Bold.ttf');
+@import url('fonts/Roboto/Roboto-Bold.ttf');
+@import url('fonts/Roboto/Roboto-BoldItalic.ttf');
+@import url('fonts/Muli/Muli-Bold.ttf');
 
 %roboto_B166{font-family: 'Roboto';font-size: 166px;font-weight: 800;text-align: center;}
 %roboto_IB16{font-family: 'Roboto';font-size: 16px;font-weight: 800;font-style: italic;text-align: center;}
@@ -253,7 +253,7 @@ input,button{
         @extend %wh-100;
         border: 1.5px solid $global-color;
         border-radius: 50%;
-        background-image: url(/icon/baseline-play_arrow-24px.svg);
+        background-image: url(icon/baseline-play_arrow-24px.svg);
         background-size:18px;
         background-position:50% 50%;
     }
@@ -707,7 +707,7 @@ input,button{
         color: $text-color;
     }
     .icon{
-        background-image: url(/icon/baseline-play_arrow-white-24px.svg);
+        background-image: url(icon/baseline-play_arrow-white-24px.svg);
         border:2px solid $text-color;
     }
 
@@ -760,7 +760,7 @@ input,button{
             color: $text-color;
             border: 1.5px solid;
             border-radius: 50%;
-            background-image: url(/icon/baseline-done-24px-white.svg);
+            background-image: url(icon/baseline-done-24px-white.svg);
             background-position: 50% 50%;
             background-size: cover;
         }
