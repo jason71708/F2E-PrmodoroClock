@@ -22,7 +22,7 @@
                   v-model="text"
                   @keyup.enter="inputHandler"
                 />
-                <button type="submit" :class="{textCH:time==0}" @click="inputHandler">＋</button>
+                <button :class="{textCH:time==0}" @click="inputHandler">＋</button>
               </form>
               <div class="working">
                 <button class="work_check" @click="changeToDoneing($event)"></button>
@@ -111,28 +111,28 @@
                 <button @click="swith(1)" class="popup_nav" :class="{active:toDoList, breakAct:time==0}">
                   <div
                     class="icon"
-                    style="-webkit-mask-image: url(/icon/baseline-list-24px.svg);mask-image: url(/icon/baseline-list-24px.svg);"
+                    style="-webkit-mask-image: url(icon/baseline-list-24px.svg);mask-image: url(icon/baseline-list-24px.svg);"
                   ></div>
                   <span class="title">to-do list</span>
                 </button>
                 <button @click="swith(2)" class="popup_nav" :class="{active:analytics, breakAct:time==0}">
                   <div
                     class="icon"
-                    style="-webkit-mask-image: url(/icon/baseline-assessment-24px.svg);mask-image:url(/icon/baseline-assessment-24px.svg);"
+                    style="-webkit-mask-image: url(icon/baseline-assessment-24px.svg);mask-image:url(icon/baseline-assessment-24px.svg);"
                   ></div>
                   <span class="title">analyticst</span>
                 </button>
                 <button @click="swith(3)" class="popup_nav" :class="{active:ringtones, breakAct:time==0}">
                   <div
                     class="icon"
-                    style="-webkit-mask-image: url(/icon/baseline-library_music-24px.svg);mask-image: url(/icon/baseline-library_music-24px.svg);"
+                    style="-webkit-mask-image: url(icon/baseline-library_music-24px.svg);mask-image: url(icon/baseline-library_music-24px.svg);"
                   ></div>
                   <span class="title">ringtones</span>
                 </button>
                 <div
                   class="small_clock_box"
                   :class="{breakSmall:time==0}"
-                  style="-webkit-mask-image: url(/imge/half_circle.svg);mask-image: url(/imge/half_circle.svg);"
+                  style="-webkit-mask-image: url(imge/half_circle.svg);mask-image: url(imge/half_circle.svg);"
                 >
                   <span class="small_time">{{timer}}</span>
                   <span class="task">{{doing[0]}}</span>
@@ -170,7 +170,7 @@
                       v-model="text"
                       @keyup.enter="inputHandler"
                     />
-                    <button type="submit" :class="{textCH:time==0}" @click="inputHandler">＋</button>
+                    <button :class="{textCH:time==0}" @click="inputHandler">＋</button>
                   </form>
                   <div class="task_all">
                     <div class="todo">
@@ -791,12 +791,12 @@
         </div>
       </div>
     </div>
-    <audio id="1" src="/music/Air_Woosh_Underwater.mp3"></audio>
-    <audio id="2" src="/music/Auto_Bullets_Flyby_Short.mp3"></audio>
-    <audio id="3" src="/music/Beep_Short.mp3"></audio>
-    <audio id="4" src="/music/Billiard_Balls_Hit.mp3"></audio>
-    <audio id="5" src="/music/Bottle_Cap_Open.mp3"></audio>
-    <audio id="6" src="/music/Phone_Ringing.mp3"></audio>
+    <audio id="1" src="music/Air_Woosh_Underwater.mp3"></audio>
+    <audio id="2" src="music/Auto_Bullets_Flyby_Short.mp3"></audio>
+    <audio id="3" src="music/Beep_Short.mp3"></audio>
+    <audio id="4" src="music/Billiard_Balls_Hit.mp3"></audio>
+    <audio id="5" src="music/Bottle_Cap_Open.mp3"></audio>
+    <audio id="6" src="music/Phone_Ringing.mp3"></audio>
 
 
     <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.9/vue.js'></script>
