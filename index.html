@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Tomato clock</title>
+  </head>
+  <body>
+    <div id="app" class="wrapper">
+      <div class="bg_1" :class="{bgCH:time==0}">
+        <div class="container">
+          <div class="row">
+            <div class="col-5">
+              <form class="mission" action="">
+                <input
+                  class="mission_input"
+                  :class="{placeCH:time==0}"
+                  type="text"
+                  placeholder="add a new mission…"
+                  v-model="text"
+                  @keyup.enter="inputHandler"
+                />
+                <button type="submit" :class="{textCH:time==0}" @click="inputHandler">＋</button>
+              </form>
+              <div class="working">
+                <button class="work_check" @click="changeToDoneing($event)"></button>
+                <div class="work_task">
+                  <span>{{doing[0]}}</span>
+                  <div class="tomato_bar">
+                    <div class="tomato" :class="{borderCH:time==0}"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="time"><span :class="{textCH:time==0}">{{timer}}</span></div>
+              <div class="task_list">
+                <div class="task_box">
+                    <template v-for="(item,index) in todo">
+                        <div class="task_bar">
+                            <button class="check_div" v-bind:todo="index" @click="changeToDone($event)"><div class="check"></div></button>
+                            <div class="task" v-bind:todo="index" @dblclick="cancelTask($event)">{{item}}</div>
+                            <button class="start" v-bind:todo="index" @click="changeToDoing($event)"><div class="icon"></div></button>
+                        </div>
+                    </template>
+                </div>
+              </div>
+              <div class="extend_div"><a class="more" :class="{textCH:time==0}" @click="swith(1);page(true)">more</a></div>
+            </div>
+            <div class="col-6">
+              <div class="clock_box">
+                <svg 
+                    class="fillTime"
+                    width="540" 
+                    height="540" 
+                    viewBox="0 0 540 540">
+                    <circle
+                        :class="{circleCH:time==0}"
+                        cx="270" cy="270" r="260"
+                        :style="{strokeDashoffset:fill}"
+                    ></circle>
+                </svg>
+                <div 
+                    class="clock" 
+                    :class="{clockCG:status, pauseClock:status, breakStatus:time==0}">
+                  <div class="play_stop_box " :class="{playboxCG:status}">
+                    <button class="play_stop " :class="{playstopCG:status, pausePlay:status, break:time==0}" @click="countTime">
+                      <div
+                        class="svg "
+                        :class="{svgCG:status, pauseSvg:status, breakSvg:time==0}"
+                        style="-webkit-mask-image: url(icon/baseline-play_arrow-24px.svg);mask-image: url(icon/baseline-play_arrow-24px.svg);"
+                      ></div>
+                    </button>
+                  </div>
+                  <div class="cancel_box">
+                    <button 
+                        class="cancel" 
+                        :class="{cancelCG:status, pauseCancel:status, breakCancel:time==0}"
+                        @click="cancelbtn"
+                        ></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-1">
+              <div class="nav_box">
+                <a
+                  @click="swith(1);page(true)"
+                  class="icon"
+                  style="background-image: url(/icon/baseline-list-24px.svg);"
+                ></a>
+                <a
+                  @click="swith(2);page(true)"
+                  class="icon"
+                  style="background-image: url(/icon/baseline-assessment-24px.svg);"
+                ></a>
+                <a
+                  @click="swith(3);page(true)"
+                  class="icon"
+                  style="background-image: url(/icon/baseline-library_music-24px.svg);"
+                ></a>
+                <span>POMODORO</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="popuppage" v-show="popup">
+          <div class="container">
+            <div class="row">
+              <div class="col-4">
+                <button @click="swith(1)" class="popup_nav" :class="{active:toDoList, breakAct:time==0}">
+                  <div
+                    class="icon"
+                    style="-webkit-mask-image: url(/icon/baseline-list-24px.svg);mask-image: url(/icon/baseline-list-24px.svg);"
+                  ></div>
+                  <span class="title">to-do list</span>
+                </button>
+                <button @click="swith(2)" class="popup_nav" :class="{active:analytics, breakAct:time==0}">
+                  <div
+                    class="icon"
+                    style="-webkit-mask-image: url(/icon/baseline-assessment-24px.svg);mask-image:url(/icon/baseline-assessment-24px.svg);"
+                  ></div>
+                  <span class="title">analyticst</span>
+                </button>
+                <button @click="swith(3)" class="popup_nav" :class="{active:ringtones, breakAct:time==0}">
+                  <div
+                    class="icon"
+                    style="-webkit-mask-image: url(/icon/baseline-library_music-24px.svg);mask-image: url(/icon/baseline-library_music-24px.svg);"
+                  ></div>
+                  <span class="title">ringtones</span>
+                </button>
+                <div
+                  class="small_clock_box"
+                  :class="{breakSmall:time==0}"
+                  style="-webkit-mask-image: url(/imge/half_circle.svg);mask-image: url(/imge/half_circle.svg);"
+                >
+                  <span class="small_time">{{timer}}</span>
+                  <span class="task">{{doing[0]}}</span>
+                </div>
+                <svg  
+                    class="small_fill"
+                    :class="{push:status}"
+                    width="104" 
+                    height="104" 
+                    viewBox="0 0 104 104"
+                    >
+                    <circle 
+                      :class="{circleCH:time==0}"
+                      cx="52" cy="52" r="46"
+                      :style="{strokeDashoffset:fillSmall}"></circle>
+                </svg>
+                <div class="small_clock" :class="{pauseSM:status , breakSM:time==0}">
+                  <div class="play_stop_box">
+                    <button class="play_stop" @click="countTime">
+                      <div
+                        class="svg"
+                      ></div>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="col-5 offset-1">
+                <div class="to_do_list" v-show="toDoList">
+                  <form class="mission" action="">
+                    <input
+                      class="mission_input"
+                      :class="{placeCH:time==0}"
+                      type="text"
+                      placeholder="add a new mission…"
+                      v-model="text"
+                      @keyup.enter="inputHandler"
+                    />
+                    <button type="submit" :class="{textCH:time==0}" @click="inputHandler">＋</button>
+                  </form>
+                  <div class="task_all">
+                    <div class="todo">
+                      <div class="todo_bar">
+                        <span class="title">to-do</span>
+                        <button
+                          class="toggle"
+                          style="background-image: url(icon/baseline-play_arrow-white-24px.svg)"
+                          @click="show1=!show1"
+                          :class="{rotate:show1}"
+                        ></button>
+                      </div>
+                      <div class="todo_box" :class="{listUP:show1}">
+                        <template v-for="(item,index) in list">
+                            <div class="todo_task">
+                                <button class="check_div" v-bind:todo="index" @click="changeListToDone">
+                                    <div class="check"></div>
+                                </button>
+                                <div class="task" v-bind:todo="index" @dblclick="cancelMix($event)">{{item}}</div>
+                                <button class="start" v-bind:todo="index" @click="changeMix($event)">
+                                    <div class="icon"></div>
+                                </button>
+                            </div>
+                        </template>
+                      </div>
+                    </div>
+                    <div class="done">
+                      <div class="done_bar">
+                        <span class="title">done</span>
+                        <button
+                          class="toggle"
+                          style="background-image: url(icon/baseline-play_arrow-white-24px.svg)"
+                          @click="show2=!show2"
+                          :class="{rotate:show2}"
+                        ></button>
+                      </div>
+                      <div class="done_box" :class="{listUP:show2}">
+                        <template v-for="(item,index) in done">
+                            <div class="done_task">
+                                <div class="check_div" v-bind:todo="index" @click="changeToTask($event)"><div class="check"></div></div>
+                                <div class="task" v-bind:todo="index" @dblclick="cancelDone($event)">
+                                <div class="title">{{item}}</div>
+                                </div>
+                                <div class="apple_group">
+                                    <div class="apple"></div>
+                                    <div class="apple"></div>
+                                    <div class="apple"></div>
+                                </div>
+                            </div>
+                        </template>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="analytics" v-show="analytics">
+                  <div class="title_bar">
+                    <span class="title">focus time</span>
+                  </div>
+                  <div class="row">
+                    <div class="col-6">
+                      <span class="today">today</span>
+                      <div class="flex">
+                        <span class="number" :class="{textCH:time==0}">20</span>
+                        <span class="text">/tomato</span>
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <span class="week">week</span>
+                      <div class="flex">
+                        <span class="number" :class="{textCH:time==0}">108</span>
+                        <span class="text">/tomato</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="title_bar chart">
+                    <span class="title">chart</span>
+                    <button class="arrowleft"></button>
+                    <span class="date">2019.7.1 - 2019.7.7</span>
+                    <button class="arrowright"></button>
+                  </div>
+                  <canvas
+                    id="myChart"
+                    width="445"
+                    height="280"
+                    style="margin-top: 16px"
+                  ></canvas>
+                </div>
+
+                <div class="ringtones" v-show="ringtones">
+                  <div class="title_bar">
+                    <span class="title">work</span>
+                  </div>
+                  <div class="music">
+                    <label for="rdo-1" class="btn-radio">
+                      <input type="radio" checked id="rdo-1" name="radio-grp" />
+                      <svg width="20px" height="20px" viewBox="0 0 20 20">
+                        <circle cx="10" cy="10" r="9"></circle>
+                        <path
+                          d="M10,7 C8.34314575,7 7,8.34314575 7,10 C7,11.6568542 8.34314575,13 10,13 C11.6568542,13 13,11.6568542 13,10 C13,8.34314575 11.6568542,7 10,7 Z"
+                          class="inner"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                        <path
+                          d="M10,1 L10,1 L10,1 C14.9705627,1 19,5.02943725 19,10 L19,10 L19,10 C19,14.9705627 14.9705627,19 10,19 L10,19 L10,19 C5.02943725,19 1,14.9705627 1,10 L1,10 L1,10 C1,5.02943725 5.02943725,1 10,1 L10,1 Z"
+                          class="outer"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                      </svg>
+                      <span>none</span>
+                    </label>
+                    <label for="rdo-2"@click="playmusic(2)" class="btn-radio">
+                      <input type="radio" id="rdo-2" name="radio-grp" />
+                      <svg width="20px" height="20px" viewBox="0 0 20 20">
+                        <circle cx="10" cy="10" r="9"></circle>
+                        <path
+                          d="M10,7 C8.34314575,7 7,8.34314575 7,10 C7,11.6568542 8.34314575,13 10,13 C11.6568542,13 13,11.6568542 13,10 C13,8.34314575 11.6568542,7 10,7 Z"
+                          class="inner"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                        <path
+                          d="M10,1 L10,1 L10,1 C14.9705627,1 19,5.02943725 19,10 L19,10 L19,10 C19,14.9705627 14.9705627,19 10,19 L10,19 L10,19 C5.02943725,19 1,14.9705627 1,10 L1,10 L1,10 C1,5.02943725 5.02943725,1 10,1 L10,1 Z"
+                          class="outer"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                      </svg>
+                      <span>Default</span>
+                    </label>
+                    <label for="rdo-3"@click="playmusic(3)" class="btn-radio">
+                      <input type="radio" id="rdo-3" name="radio-grp" />
+                      <svg width="20px" height="20px" viewBox="0 0 20 20">
+                        <circle cx="10" cy="10" r="9"></circle>
+                        <path
+                          d="M10,7 C8.34314575,7 7,8.34314575 7,10 C7,11.6568542 8.34314575,13 10,13 C11.6568542,13 13,11.6568542 13,10 C13,8.34314575 11.6568542,7 10,7 Z"
+                          class="inner"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                        <path
+                          d="M10,1 L10,1 L10,1 C14.9705627,1 19,5.02943725 19,10 L19,10 L19,10 C19,14.9705627 14.9705627,19 10,19 L10,19 L10,19 C5.02943725,19 1,14.9705627 1,10 L1,10 L1,10 C1,5.02943725 5.02943725,1 10,1 L10,1 Z"
+                          class="outer"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                      </svg>
+                      <span>alarm</span>
+                    </label>
+                    <label for="rdo-4" @click="playmusic(4)"class="btn-radio">
+                      <input type="radio" id="rdo-4" name="radio-grp" />
+                      <svg width="20px" height="20px" viewBox="0 0 20 20">
+                        <circle cx="10" cy="10" r="9"></circle>
+                        <path
+                          d="M10,7 C8.34314575,7 7,8.34314575 7,10 C7,11.6568542 8.34314575,13 10,13 C11.6568542,13 13,11.6568542 13,10 C13,8.34314575 11.6568542,7 10,7 Z"
+                          class="inner"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                        <path
+                          d="M10,1 L10,1 L10,1 C14.9705627,1 19,5.02943725 19,10 L19,10 L19,10 C19,14.9705627 14.9705627,19 10,19 L10,19 L10,19 C5.02943725,19 1,14.9705627 1,10 L1,10 L1,10 C1,5.02943725 5.02943725,1 10,1 L10,1 Z"
+                          class="outer"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                      </svg>
+                      <span>alert</span>
+                    </label>
+                    <label for="rdo-5" @click="playmusic(5)"class="btn-radio">
+                      <input type="radio" id="rdo-5" name="radio-grp" />
+                      <svg width="20px" height="20px" viewBox="0 0 20 20">
+                        <circle cx="10" cy="10" r="9"></circle>
+                        <path
+                          d="M10,7 C8.34314575,7 7,8.34314575 7,10 C7,11.6568542 8.34314575,13 10,13 C11.6568542,13 13,11.6568542 13,10 C13,8.34314575 11.6568542,7 10,7 Z"
+                          class="inner"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                        <path
+                          d="M10,1 L10,1 L10,1 C14.9705627,1 19,5.02943725 19,10 L19,10 L19,10 C19,14.9705627 14.9705627,19 10,19 L10,19 L10,19 C5.02943725,19 1,14.9705627 1,10 L1,10 L1,10 C1,5.02943725 5.02943725,1 10,1 L10,1 Z"
+                          class="outer"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                      </svg>
+                      <span>beep</span>
+                    </label>
+                    <label for="rdo-6" @click="playmusic(6)"class="btn-radio">
+                      <input type="radio" id="rdo-6" name="radio-grp" />
+                      <svg width="20px" height="20px" viewBox="0 0 20 20">
+                        <circle cx="10" cy="10" r="9"></circle>
+                        <path
+                          d="M10,7 C8.34314575,7 7,8.34314575 7,10 C7,11.6568542 8.34314575,13 10,13 C11.6568542,13 13,11.6568542 13,10 C13,8.34314575 11.6568542,7 10,7 Z"
+                          class="inner"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                        <path
+                          d="M10,1 L10,1 L10,1 C14.9705627,1 19,5.02943725 19,10 L19,10 L19,10 C19,14.9705627 14.9705627,19 10,19 L10,19 L10,19 C5.02943725,19 1,14.9705627 1,10 L1,10 L1,10 C1,5.02943725 5.02943725,1 10,1 L10,1 Z"
+                          class="outer"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                      </svg>
+                      <span>bell</span>
+                    </label>
+                    <label for="rdo-7" @click="playmusic(1)"class="btn-radio">
+                      <input type="radio" id="rdo-7" name="radio-grp" />
+                      <svg width="20px" height="20px" viewBox="0 0 20 20">
+                        <circle cx="10" cy="10" r="9"></circle>
+                        <path
+                          d="M10,7 C8.34314575,7 7,8.34314575 7,10 C7,11.6568542 8.34314575,13 10,13 C11.6568542,13 13,11.6568542 13,10 C13,8.34314575 11.6568542,7 10,7 Z"
+                          class="inner"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                        <path
+                          d="M10,1 L10,1 L10,1 C14.9705627,1 19,5.02943725 19,10 L19,10 L19,10 C19,14.9705627 14.9705627,19 10,19 L10,19 L10,19 C5.02943725,19 1,14.9705627 1,10 L1,10 L1,10 C1,5.02943725 5.02943725,1 10,1 L10,1 Z"
+                          class="outer"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                      </svg>
+                      <span>bird</span>
+                    </label>
+                    <label for="rdo-8" @click="playmusic(2)"class="btn-radio">
+                      <input type="radio" id="rdo-8" name="radio-grp" />
+                      <svg width="20px" height="20px" viewBox="0 0 20 20">
+                        <circle cx="10" cy="10" r="9"></circle>
+                        <path
+                          d="M10,7 C8.34314575,7 7,8.34314575 7,10 C7,11.6568542 8.34314575,13 10,13 C11.6568542,13 13,11.6568542 13,10 C13,8.34314575 11.6568542,7 10,7 Z"
+                          class="inner"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                        <path
+                          d="M10,1 L10,1 L10,1 C14.9705627,1 19,5.02943725 19,10 L19,10 L19,10 C19,14.9705627 14.9705627,19 10,19 L10,19 L10,19 C5.02943725,19 1,14.9705627 1,10 L1,10 L1,10 C1,5.02943725 5.02943725,1 10,1 L10,1 Z"
+                          class="outer"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                      </svg>
+                      <span>bugle</span>
+                    </label>
+                    <label for="rdo-9" @click="playmusic(3)"class="btn-radio">
+                      <input type="radio" id="rdo-9" name="radio-grp" />
+                      <svg width="20px" height="20px" viewBox="0 0 20 20">
+                        <circle cx="10" cy="10" r="9"></circle>
+                        <path
+                          d="M10,7 C8.34314575,7 7,8.34314575 7,10 C7,11.6568542 8.34314575,13 10,13 C11.6568542,13 13,11.6568542 13,10 C13,8.34314575 11.6568542,7 10,7 Z"
+                          class="inner"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                        <path
+                          d="M10,1 L10,1 L10,1 C14.9705627,1 19,5.02943725 19,10 L19,10 L19,10 C19,14.9705627 14.9705627,19 10,19 L10,19 L10,19 C5.02943725,19 1,14.9705627 1,10 L1,10 L1,10 C1,5.02943725 5.02943725,1 10,1 L10,1 Z"
+                          class="outer"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                      </svg>
+                      <span>digital</span>
+                    </label>
+                    <label for="rdo-10"@click="playmusic(4)" class="btn-radio">
+                      <input type="radio" id="rdo-10" name="radio-grp" />
+                      <svg width="20px" height="20px" viewBox="0 0 20 20">
+                        <circle cx="10" cy="10" r="9"></circle>
+                        <path
+                          d="M10,7 C8.34314575,7 7,8.34314575 7,10 C7,11.6568542 8.34314575,13 10,13 C11.6568542,13 13,11.6568542 13,10 C13,8.34314575 11.6568542,7 10,7 Z"
+                          class="inner"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                        <path
+                          d="M10,1 L10,1 L10,1 C14.9705627,1 19,5.02943725 19,10 L19,10 L19,10 C19,14.9705627 14.9705627,19 10,19 L10,19 L10,19 C5.02943725,19 1,14.9705627 1,10 L1,10 L1,10 C1,5.02943725 5.02943725,1 10,1 L10,1 Z"
+                          class="outer"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                      </svg>
+                      <span>drop</span>
+                    </label>
+                    <label for="rdo-12"@click="playmusic(5)" class="btn-radio">
+                      <input type="radio" id="rdo-12" name="radio-grp" />
+                      <svg width="20px" height="20px" viewBox="0 0 20 20">
+                        <circle cx="10" cy="10" r="9"></circle>
+                        <path
+                          d="M10,7 C8.34314575,7 7,8.34314575 7,10 C7,11.6568542 8.34314575,13 10,13 C11.6568542,13 13,11.6568542 13,10 C13,8.34314575 11.6568542,7 10,7 Z"
+                          class="inner"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                        <path
+                          d="M10,1 L10,1 L10,1 C14.9705627,1 19,5.02943725 19,10 L19,10 L19,10 C19,14.9705627 14.9705627,19 10,19 L10,19 L10,19 C5.02943725,19 1,14.9705627 1,10 L1,10 L1,10 C1,5.02943725 5.02943725,1 10,1 L10,1 Z"
+                          class="outer"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                      </svg>
+                      <span>horn</span>
+                    </label>
+                    <label for="rdo-13"@click="playmusic(6)" class="btn-radio">
+                      <input type="radio" id="rdo-13" name="radio-grp" />
+                      <svg width="20px" height="20px" viewBox="0 0 20 20">
+                        <circle cx="10" cy="10" r="9"></circle>
+                        <path
+                          d="M10,7 C8.34314575,7 7,8.34314575 7,10 C7,11.6568542 8.34314575,13 10,13 C11.6568542,13 13,11.6568542 13,10 C13,8.34314575 11.6568542,7 10,7 Z"
+                          class="inner"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                        <path
+                          d="M10,1 L10,1 L10,1 C14.9705627,1 19,5.02943725 19,10 L19,10 L19,10 C19,14.9705627 14.9705627,19 10,19 L10,19 L10,19 C5.02943725,19 1,14.9705627 1,10 L1,10 L1,10 C1,5.02943725 5.02943725,1 10,1 L10,1 Z"
+                          class="outer"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                      </svg>
+                      <span>music</span>
+                    </label>
+                    <label for="rdo-14"@click="playmusic(1)" class="btn-radio">
+                      <input type="radio" id="rdo-14" name="radio-grp" />
+                      <svg width="20px" height="20px" viewBox="0 0 20 20">
+                        <circle cx="10" cy="10" r="9"></circle>
+                        <path
+                          d="M10,7 C8.34314575,7 7,8.34314575 7,10 C7,11.6568542 8.34314575,13 10,13 C11.6568542,13 13,11.6568542 13,10 C13,8.34314575 11.6568542,7 10,7 Z"
+                          class="inner"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                        <path
+                          d="M10,1 L10,1 L10,1 C14.9705627,1 19,5.02943725 19,10 L19,10 L19,10 C19,14.9705627 14.9705627,19 10,19 L10,19 L10,19 C5.02943725,19 1,14.9705627 1,10 L1,10 L1,10 C1,5.02943725 5.02943725,1 10,1 L10,1 Z"
+                          class="outer"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                      </svg>
+                      <span>ring</span>
+                    </label>
+                    <label for="rdo-15"@click="playmusic(2)" class="btn-radio">
+                      <input type="radio" id="rdo-15" name="radio-grp" />
+                      <svg width="20px" height="20px" viewBox="0 0 20 20">
+                        <circle cx="10" cy="10" r="9"></circle>
+                        <path
+                          d="M10,7 C8.34314575,7 7,8.34314575 7,10 C7,11.6568542 8.34314575,13 10,13 C11.6568542,13 13,11.6568542 13,10 C13,8.34314575 11.6568542,7 10,7 Z"
+                          class="inner"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                        <path
+                          d="M10,1 L10,1 L10,1 C14.9705627,1 19,5.02943725 19,10 L19,10 L19,10 C19,14.9705627 14.9705627,19 10,19 L10,19 L10,19 C5.02943725,19 1,14.9705627 1,10 L1,10 L1,10 C1,5.02943725 5.02943725,1 10,1 L10,1 Z"
+                          class="outer"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                      </svg>
+                      <span>warning</span>
+                    </label>
+                    <label for="rdo-16"@click="playmusic(3)" class="btn-radio">
+                      <input type="radio" id="rdo-16" name="radio-grp" />
+                      <svg width="20px" height="20px" viewBox="0 0 20 20">
+                        <circle cx="10" cy="10" r="9"></circle>
+                        <path
+                          d="M10,7 C8.34314575,7 7,8.34314575 7,10 C7,11.6568542 8.34314575,13 10,13 C11.6568542,13 13,11.6568542 13,10 C13,8.34314575 11.6568542,7 10,7 Z"
+                          class="inner"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                        <path
+                          d="M10,1 L10,1 L10,1 C14.9705627,1 19,5.02943725 19,10 L19,10 L19,10 C19,14.9705627 14.9705627,19 10,19 L10,19 L10,19 C5.02943725,19 1,14.9705627 1,10 L1,10 L1,10 C1,5.02943725 5.02943725,1 10,1 L10,1 Z"
+                          class="outer"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                      </svg>
+                      <span>whistle</span>
+                    </label>
+                  </div>
+                  <div class="title_bar">
+                    <span class="title">break</span>
+                  </div>
+                  <div class="music">
+                    <label for="rd-1"  class="btn-radio">
+                      <input type="radio" id="rd-1" name="radio-grp2" />
+                      <svg width="20px" height="20px" viewBox="0 0 20 20">
+                        <circle cx="10" cy="10" r="9"></circle>
+                        <path
+                          d="M10,7 C8.34314575,7 7,8.34314575 7,10 C7,11.6568542 8.34314575,13 10,13 C11.6568542,13 13,11.6568542 13,10 C13,8.34314575 11.6568542,7 10,7 Z"
+                          class="inner"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                        <path
+                          d="M10,1 L10,1 L10,1 C14.9705627,1 19,5.02943725 19,10 L19,10 L19,10 C19,14.9705627 14.9705627,19 10,19 L10,19 L10,19 C5.02943725,19 1,14.9705627 1,10 L1,10 L1,10 C1,5.02943725 5.02943725,1 10,1 L10,1 Z"
+                          class="outer"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                      </svg>
+                      <span>none</span>
+                    </label>
+                    <label for="rd-2" @click="playmusic2(1)" class="btn-radio">
+                      <input type="radio" checked id="rd-2" name="radio-grp2" />
+                      <svg width="20px" height="20px" viewBox="0 0 20 20">
+                        <circle cx="10" cy="10" r="9"></circle>
+                        <path
+                          d="M10,7 C8.34314575,7 7,8.34314575 7,10 C7,11.6568542 8.34314575,13 10,13 C11.6568542,13 13,11.6568542 13,10 C13,8.34314575 11.6568542,7 10,7 Z"
+                          class="inner"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                        <path
+                          d="M10,1 L10,1 L10,1 C14.9705627,1 19,5.02943725 19,10 L19,10 L19,10 C19,14.9705627 14.9705627,19 10,19 L10,19 L10,19 C5.02943725,19 1,14.9705627 1,10 L1,10 L1,10 C1,5.02943725 5.02943725,1 10,1 L10,1 Z"
+                          class="outer"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                      </svg>
+                      <span>Default</span>
+                    </label>
+                    <label for="rd-3" @click="playmusic2(2)"class="btn-radio">
+                      <input type="radio" id="rd-3" name="radio-grp2" />
+                      <svg width="20px" height="20px" viewBox="0 0 20 20">
+                        <circle cx="10" cy="10" r="9"></circle>
+                        <path
+                          d="M10,7 C8.34314575,7 7,8.34314575 7,10 C7,11.6568542 8.34314575,13 10,13 C11.6568542,13 13,11.6568542 13,10 C13,8.34314575 11.6568542,7 10,7 Z"
+                          class="inner"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                        <path
+                          d="M10,1 L10,1 L10,1 C14.9705627,1 19,5.02943725 19,10 L19,10 L19,10 C19,14.9705627 14.9705627,19 10,19 L10,19 L10,19 C5.02943725,19 1,14.9705627 1,10 L1,10 L1,10 C1,5.02943725 5.02943725,1 10,1 L10,1 Z"
+                          class="outer"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                      </svg>
+                      <span>alarm</span>
+                    </label>
+                    <label for="rd-4"@click="playmusic2(3)" class="btn-radio">
+                      <input type="radio" id="rd-4" name="radio-grp2" />
+                      <svg width="20px" height="20px" viewBox="0 0 20 20">
+                        <circle cx="10" cy="10" r="9"></circle>
+                        <path
+                          d="M10,7 C8.34314575,7 7,8.34314575 7,10 C7,11.6568542 8.34314575,13 10,13 C11.6568542,13 13,11.6568542 13,10 C13,8.34314575 11.6568542,7 10,7 Z"
+                          class="inner"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                        <path
+                          d="M10,1 L10,1 L10,1 C14.9705627,1 19,5.02943725 19,10 L19,10 L19,10 C19,14.9705627 14.9705627,19 10,19 L10,19 L10,19 C5.02943725,19 1,14.9705627 1,10 L1,10 L1,10 C1,5.02943725 5.02943725,1 10,1 L10,1 Z"
+                          class="outer"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                      </svg>
+                      <span>alert</span>
+                    </label>
+                    <label for="rd-5" @click="playmusic2(4)"class="btn-radio">
+                      <input type="radio" id="rd-5" name="radio-grp2" />
+                      <svg width="20px" height="20px" viewBox="0 0 20 20">
+                        <circle cx="10" cy="10" r="9"></circle>
+                        <path
+                          d="M10,7 C8.34314575,7 7,8.34314575 7,10 C7,11.6568542 8.34314575,13 10,13 C11.6568542,13 13,11.6568542 13,10 C13,8.34314575 11.6568542,7 10,7 Z"
+                          class="inner"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                        <path
+                          d="M10,1 L10,1 L10,1 C14.9705627,1 19,5.02943725 19,10 L19,10 L19,10 C19,14.9705627 14.9705627,19 10,19 L10,19 L10,19 C5.02943725,19 1,14.9705627 1,10 L1,10 L1,10 C1,5.02943725 5.02943725,1 10,1 L10,1 Z"
+                          class="outer"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                      </svg>
+                      <span>beep</span>
+                    </label>
+                    <label for="rd-6"@click="playmusic2(5)" class="btn-radio">
+                      <input type="radio" id="rd-6" name="radio-grp2" />
+                      <svg width="20px" height="20px" viewBox="0 0 20 20">
+                        <circle cx="10" cy="10" r="9"></circle>
+                        <path
+                          d="M10,7 C8.34314575,7 7,8.34314575 7,10 C7,11.6568542 8.34314575,13 10,13 C11.6568542,13 13,11.6568542 13,10 C13,8.34314575 11.6568542,7 10,7 Z"
+                          class="inner"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                        <path
+                          d="M10,1 L10,1 L10,1 C14.9705627,1 19,5.02943725 19,10 L19,10 L19,10 C19,14.9705627 14.9705627,19 10,19 L10,19 L10,19 C5.02943725,19 1,14.9705627 1,10 L1,10 L1,10 C1,5.02943725 5.02943725,1 10,1 L10,1 Z"
+                          class="outer"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                      </svg>
+                      <span>bell</span>
+                    </label>
+                    <label for="rd-7" @click="playmusic2(6)"class="btn-radio">
+                      <input type="radio" id="rd-7" name="radio-grp2" />
+                      <svg width="20px" height="20px" viewBox="0 0 20 20">
+                        <circle cx="10" cy="10" r="9"></circle>
+                        <path
+                          d="M10,7 C8.34314575,7 7,8.34314575 7,10 C7,11.6568542 8.34314575,13 10,13 C11.6568542,13 13,11.6568542 13,10 C13,8.34314575 11.6568542,7 10,7 Z"
+                          class="inner"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                        <path
+                          d="M10,1 L10,1 L10,1 C14.9705627,1 19,5.02943725 19,10 L19,10 L19,10 C19,14.9705627 14.9705627,19 10,19 L10,19 L10,19 C5.02943725,19 1,14.9705627 1,10 L1,10 L1,10 C1,5.02943725 5.02943725,1 10,1 L10,1 Z"
+                          class="outer"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                      </svg>
+                      <span>bird</span>
+                    </label>
+                    <label for="rd-8" @click="playmusic2(2)"class="btn-radio">
+                      <input type="radio" id="rd-8" name="radio-grp2" />
+                      <svg width="20px" height="20px" viewBox="0 0 20 20">
+                        <circle cx="10" cy="10" r="9"></circle>
+                        <path
+                          d="M10,7 C8.34314575,7 7,8.34314575 7,10 C7,11.6568542 8.34314575,13 10,13 C11.6568542,13 13,11.6568542 13,10 C13,8.34314575 11.6568542,7 10,7 Z"
+                          class="inner"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                        <path
+                          d="M10,1 L10,1 L10,1 C14.9705627,1 19,5.02943725 19,10 L19,10 L19,10 C19,14.9705627 14.9705627,19 10,19 L10,19 L10,19 C5.02943725,19 1,14.9705627 1,10 L1,10 L1,10 C1,5.02943725 5.02943725,1 10,1 L10,1 Z"
+                          class="outer"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                      </svg>
+                      <span>bugle</span>
+                    </label>
+                    <label for="rd-9" @click="playmusic2(1)"class="btn-radio">
+                      <input type="radio" id="rd-9" name="radio-grp2" />
+                      <svg width="20px" height="20px" viewBox="0 0 20 20">
+                        <circle cx="10" cy="10" r="9"></circle>
+                        <path
+                          d="M10,7 C8.34314575,7 7,8.34314575 7,10 C7,11.6568542 8.34314575,13 10,13 C11.6568542,13 13,11.6568542 13,10 C13,8.34314575 11.6568542,7 10,7 Z"
+                          class="inner"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                        <path
+                          d="M10,1 L10,1 L10,1 C14.9705627,1 19,5.02943725 19,10 L19,10 L19,10 C19,14.9705627 14.9705627,19 10,19 L10,19 L10,19 C5.02943725,19 1,14.9705627 1,10 L1,10 L1,10 C1,5.02943725 5.02943725,1 10,1 L10,1 Z"
+                          class="outer"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                      </svg>
+                      <span>digital</span>
+                    </label>
+                    <label for="rd-10"@click="playmusic2(5)" class="btn-radio">
+                      <input type="radio" id="rd-10" name="radio-grp2" />
+                      <svg width="20px" height="20px" viewBox="0 0 20 20">
+                        <circle cx="10" cy="10" r="9"></circle>
+                        <path
+                          d="M10,7 C8.34314575,7 7,8.34314575 7,10 C7,11.6568542 8.34314575,13 10,13 C11.6568542,13 13,11.6568542 13,10 C13,8.34314575 11.6568542,7 10,7 Z"
+                          class="inner"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                        <path
+                          d="M10,1 L10,1 L10,1 C14.9705627,1 19,5.02943725 19,10 L19,10 L19,10 C19,14.9705627 14.9705627,19 10,19 L10,19 L10,19 C5.02943725,19 1,14.9705627 1,10 L1,10 L1,10 C1,5.02943725 5.02943725,1 10,1 L10,1 Z"
+                          class="outer"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                      </svg>
+                      <span>drop</span>
+                    </label>
+                    <label for="rd-12" @click="playmusic2(2)"class="btn-radio">
+                      <input type="radio" id="rd-12" name="radio-grp2" />
+                      <svg width="20px" height="20px" viewBox="0 0 20 20">
+                        <circle cx="10" cy="10" r="9"></circle>
+                        <path
+                          d="M10,7 C8.34314575,7 7,8.34314575 7,10 C7,11.6568542 8.34314575,13 10,13 C11.6568542,13 13,11.6568542 13,10 C13,8.34314575 11.6568542,7 10,7 Z"
+                          class="inner"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                        <path
+                          d="M10,1 L10,1 L10,1 C14.9705627,1 19,5.02943725 19,10 L19,10 L19,10 C19,14.9705627 14.9705627,19 10,19 L10,19 L10,19 C5.02943725,19 1,14.9705627 1,10 L1,10 L1,10 C1,5.02943725 5.02943725,1 10,1 L10,1 Z"
+                          class="outer"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                      </svg>
+                      <span>horn</span>
+                    </label>
+                    <label for="rd-13" @click="playmusic2(1)"class="btn-radio">
+                      <input type="radio" id="rd-13" name="radio-grp2" />
+                      <svg width="20px" height="20px" viewBox="0 0 20 20">
+                        <circle cx="10" cy="10" r="9"></circle>
+                        <path
+                          d="M10,7 C8.34314575,7 7,8.34314575 7,10 C7,11.6568542 8.34314575,13 10,13 C11.6568542,13 13,11.6568542 13,10 C13,8.34314575 11.6568542,7 10,7 Z"
+                          class="inner"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                        <path
+                          d="M10,1 L10,1 L10,1 C14.9705627,1 19,5.02943725 19,10 L19,10 L19,10 C19,14.9705627 14.9705627,19 10,19 L10,19 L10,19 C5.02943725,19 1,14.9705627 1,10 L1,10 L1,10 C1,5.02943725 5.02943725,1 10,1 L10,1 Z"
+                          class="outer"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                      </svg>
+                      <span>music</span>
+                    </label>
+                    <label for="rd-14"@click="playmusic2(4)" class="btn-radio">
+                      <input type="radio" id="rd-14" name="radio-grp2" />
+                      <svg width="20px" height="20px" viewBox="0 0 20 20">
+                        <circle cx="10" cy="10" r="9"></circle>
+                        <path
+                          d="M10,7 C8.34314575,7 7,8.34314575 7,10 C7,11.6568542 8.34314575,13 10,13 C11.6568542,13 13,11.6568542 13,10 C13,8.34314575 11.6568542,7 10,7 Z"
+                          class="inner"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                        <path
+                          d="M10,1 L10,1 L10,1 C14.9705627,1 19,5.02943725 19,10 L19,10 L19,10 C19,14.9705627 14.9705627,19 10,19 L10,19 L10,19 C5.02943725,19 1,14.9705627 1,10 L1,10 L1,10 C1,5.02943725 5.02943725,1 10,1 L10,1 Z"
+                          class="outer"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                      </svg>
+                      <span>ring</span>
+                    </label>
+                    <label for="rd-15" @click="playmusic2(3)"class="btn-radio">
+                      <input type="radio" id="rd-15" name="radio-grp2" />
+                      <svg width="20px" height="20px" viewBox="0 0 20 20">
+                        <circle cx="10" cy="10" r="9"></circle>
+                        <path
+                          d="M10,7 C8.34314575,7 7,8.34314575 7,10 C7,11.6568542 8.34314575,13 10,13 C11.6568542,13 13,11.6568542 13,10 C13,8.34314575 11.6568542,7 10,7 Z"
+                          class="inner"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                        <path
+                          d="M10,1 L10,1 L10,1 C14.9705627,1 19,5.02943725 19,10 L19,10 L19,10 C19,14.9705627 14.9705627,19 10,19 L10,19 L10,19 C5.02943725,19 1,14.9705627 1,10 L1,10 L1,10 C1,5.02943725 5.02943725,1 10,1 L10,1 Z"
+                          class="outer"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                      </svg>
+                      <span>warning</span>
+                    </label>
+                    <label for="rd-16" @click="playmusic2(4)"class="btn-radio">
+                      <input type="radio" id="rd-16" name="radio-grp2" />
+                      <svg width="20px" height="20px" viewBox="0 0 20 20">
+                        <circle cx="10" cy="10" r="9"></circle>
+                        <path
+                          d="M10,7 C8.34314575,7 7,8.34314575 7,10 C7,11.6568542 8.34314575,13 10,13 C11.6568542,13 13,11.6568542 13,10 C13,8.34314575 11.6568542,7 10,7 Z"
+                          class="inner"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                        <path
+                          d="M10,1 L10,1 L10,1 C14.9705627,1 19,5.02943725 19,10 L19,10 L19,10 C19,14.9705627 14.9705627,19 10,19 L10,19 L10,19 C5.02943725,19 1,14.9705627 1,10 L1,10 L1,10 C1,5.02943725 5.02943725,1 10,1 L10,1 Z"
+                          class="outer"
+                          :class="{breakPath:time==0}"
+                        ></path>
+                      </svg>
+                      <span>whistle</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-1 offset-1">
+                <a @click="page(false)" class="close"></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <audio id="1" src="/music/Air_Woosh_Underwater.mp3"></audio>
+    <audio id="2" src="/music/Auto_Bullets_Flyby_Short.mp3"></audio>
+    <audio id="3" src="/music/Beep_Short.mp3"></audio>
+    <audio id="4" src="/music/Billiard_Balls_Hit.mp3"></audio>
+    <audio id="5" src="/music/Bottle_Cap_Open.mp3"></audio>
+    <audio id="6" src="/music/Phone_Ringing.mp3"></audio>
+
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.9/vue.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.js"></script>
+    <script>
+        const color='#00A7FF';
+        let vm=new Vue({
+            el:'#app',
+            data:{
+                status:false,  //是否在計時
+                ringNumber:0,  //休息完鈴聲
+                ringNumber2:1,  //休息鈴聲
+                time:10,
+                break:10,
+                count:null, //放setInterval
+                show1:true,//toggle列表用
+                show2:true,
+                popup:false,
+                toDoList:true,
+                analytics:false,
+                ringtones:false,
+                text:'',
+                doing:[
+                    'the First thing to do today'
+                ],
+                todo:[
+                    'the second thing to do today',
+                    'the third thing to do today',
+                ],
+                done:[
+                    'mockup of the new case',
+                    'product prototype',
+                    'draw a wireframe',
+                    'website detail refine'
+                ]
+            },
+            computed:{
+                list(){  //副頁面待辦清單(正在進行＋代辦事項)
+                    return this.doing.concat(this.todo);
+                },
+                timer(){ //計算時間
+                    if(this.time>0){
+                        let min=('0'+ parseInt(this.time/60,10)).slice(-2);
+                        let sec=('0'+ this.time%60).slice(-2);
+                        return `${min}:${sec}`
+                    }else{
+                        let min=('0'+ parseInt(this.break/60,10)).slice(-2);
+                        let sec=('0'+ this.break%60).slice(-2);
+                        return `${min}:${sec}`
+                    }
+                },
+                fill(){ //時間進度條
+                    if(this.time>0){
+                        //              長度  總定時   
+                        return `${1634-(1634/1500 * (1500-this.time))}`;
+                    }else{
+                        return `${1634-(1634/300 * (300-this.break))}`;
+                    }
+                },
+                fillSmall(){ //小的進度條
+                    if(this.time>0){
+                        //              長度  總定時   
+                        return `${289-(289/1500 * (1500-this.time))}`;
+                    }else{
+                        return `${289-(289/300 * (300-this.break))}`;
+                    }
+                }
+            },
+            methods:{
+                swith(on){ //開關選單
+                    if(on==1){
+                        this.toDoList=true;
+                        this.analytics=false;
+                        this.ringtones=false;
+                    }else if(on==2){
+                        this.toDoList=false;
+                        this.analytics=true;
+                        this.ringtones=false;
+                    }else{
+                        this.toDoList=false;
+                        this.analytics=false;
+                        this.ringtones=true;
+                    }
+                },
+                page(e){ //傳入true,false開關頁面
+                    this.popup=e;
+                },
+                inputHandler(){  //加入todo事項
+                    if(this.text){
+                        if(this.doing.length==0){
+                            this.doing.push(this.text)
+                        }else{
+                            this.todo.push(this.text)
+                        }
+                        this.text=''
+                    }
+                },
+                cancelTask(event){   //刪除當前點擊的元素(todo事項)
+                    const num=event.currentTarget.getAttribute("todo");//取得當前元素的編號
+                    this.todo.splice(num,1);
+                },
+                cancelDone(event){
+                    const num=event.currentTarget.getAttribute("todo");//取得當前元素的編號
+                    this.done.splice(num,1);
+                },
+                changeToDoing(event){
+                    const num=event.currentTarget.getAttribute("todo");
+                    this.doing.push(this.todo[num]);//把待辦事項複製到正在做
+                    this.todo.splice(num,1);//原本選的代辦事項刪除
+                    this.todo.unshift(this.doing[0]);//把原本正在做事項複製到代辦事項首個
+                    this.doing.shift();//刪除正在做事項首個(原本舊的)
+                    if(this.status){  //重新計算
+                        clearInterval(this.count);
+                        this.status=!this.status;
+                    }
+                    this.time=1500;
+                    this.break=300;
+                },
+                changeToTask(event){//完成轉到待辦
+                    const num=event.currentTarget.getAttribute("todo");
+                    this.todo.push(this.done[num]);
+                    this.done.splice(num,1);
+                },
+                changeToDone(event){//待辦轉到完成
+                    const num=event.currentTarget.getAttribute("todo");
+                    this.done.push(this.todo[num]);
+                    this.todo.splice(num,1);
+                },
+                changeToDoneing(event){//正在做轉到完成
+                    if(this.todo.length!=0){
+                        this.doing.push(this.todo[0]);
+                        this.todo.shift();
+                        this.done.push(this.doing[0]);
+                        this.doing.shift();
+                        if(this.status){  //重新計算
+                            clearInterval(this.count);
+                            this.status=!this.status;
+                        }
+                        this.time=1500;
+                        this.break=300;
+                    }
+                },
+                cancelMix(event){
+                    const num=event.currentTarget.getAttribute("todo");
+                    if(num==0 && this.todo.length>0){//選到第一個(正在做事項) 且 待辦事項要有剩才能刪
+                        this.doing.push(this.todo[0]);//先把待辦首個複製到正在做尾個
+                        this.doing.shift();//刪除正在做
+                        this.todo.shift();//因待辦首個複製到正在做，原本的就刪掉
+                        if(this.status){  //重新計算
+                            clearInterval(this.count);
+                            this.status=!this.status;
+                        }
+                        this.time=1500;
+                        this.break=300;
+                    }else{//選到其餘(待辦事項)
+                        this.todo.splice(num-1,1);//總清單包含正在做與待辦，總清單排序1才是待辦首個，故編號減1
+                    }
+                },
+                changeMix(event){
+                    const num=event.currentTarget.getAttribute("todo");
+                    if(num!=0){//如果選到正在做以外的事項 同changeToDoing
+                        this.doing.push(this.todo[num-1]); 
+                        this.todo.splice(num-1,1);
+                        this.todo.unshift(this.doing[0]);
+                        this.doing.shift();
+                        if(this.status){  //重新計算
+                            clearInterval(this.count);
+                            this.status=!this.status;
+                        }
+                        this.time=1500;
+                        this.break=300;
+                    }
+                    this.popup=false;
+                },
+                changeListToDone(event){
+                    const num=event.currentTarget.getAttribute("todo");
+                    if(num==0 && this.todo.length>0){//選到第一個(正在做事項) 且 待辦事項要有剩才能轉到完成
+                        this.done.push(this.doing[0]);
+                        this.doing.push(this.todo[0]);
+                        this.doing.shift();
+                        this.todo.shift();
+                        if(this.status){  //重新計算
+                            clearInterval(this.count);
+                            this.status=!this.status;
+                            this.time=1500;
+                            this.break=300;
+                        }
+                    }else if(this.todo.length>0){  //不設這個條件的話，會一直傳空陣列
+                        this.done.push(this.todo[num-1]);
+                        this.todo.splice(num-1,1);
+                    }
+                },
+                countTime(){
+                    if(!this.status){
+                        this.count=setInterval(() =>{
+                            if(this.time>0){
+                                this.time--;
+                            }else if(this.break>0){
+                                this.break--;
+                            }else{
+                                this.time=1500;
+                                this.break=300;
+                            }
+                            if(this.time==1){
+                                let num=this.ringNumber2;
+                                const music=document.getElementById(num);
+                                music.play();
+                            }else if(this.break==1){
+                                let num=this.ringNumber;
+                                const music=document.getElementById(num);
+                                music.play();
+                            }
+                        },1000)
+                    }else{
+                        clearInterval(this.count)
+                    }
+                    this.status=!this.status;
+                },
+                cancelbtn(){
+                    if(this.status){
+                        clearInterval(this.count)
+                        this.status=!this.status;
+                        this.time=1500;
+                        this.break=300;
+                    }
+                },
+                playmusic(e){
+                    const music=document.getElementById(e);
+                    this.ringNumber=e;
+                    music.currentTime = 0;
+                    music.play();
+                },
+                playmusic2(i){
+                    const music=document.getElementById(i);
+                    this.ringNumber2=i;
+                    music.currentTime = 0;
+                    music.play();
+                }
+            }
+            //*********之後修產生空陣列的bug，目前只是把最後一項鎖住而已
+            //*********剩下計算蘋果數量功能
+        })
+
+
+
+      var ctx = document.getElementById("myChart");
+      var myChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: ["7/1", "7/2", "7/3", "7/4", "7/5", "7/6", "7/7"],
+          datasets: [
+            {
+              label: "total apple",
+              data: [12, 16, 4, 8, 8, 20, 12],
+              backgroundColor: [
+                "#fff",
+                "#00A7FF",
+                "#fff",
+                "#fff",
+                "#fff",
+                '#FF4384',
+                "#fff"
+              ],
+              borderWidth: 0
+            }
+          ]
+        },
+        options: {
+          //   events : ["mousemove", "mouseout", "click"],
+          //   onClick : function (event, bars){
+          //     var activeElement = bars[0];   //当前被选中的元素
+          //     var color = activeElement._model.backgroundColor;
+          //     console.log(color);
+          //   },
+          layout: {
+            padding: {
+              left: 0,
+              right: 0,
+              top: 16,
+              bottom: 0
+            }
+          },
+          legend: {
+            display: false
+          },
+          scales: {
+            xAxes: [
+              {
+                ticks: {
+                  fontColor: "#fff",
+                  fontSize: 16,
+                  fontStyle: "bold"
+                },
+                barThickness: 32,
+                gridLines: {
+                  display: false,
+                  color: "#fff"
+                }
+              }
+            ],
+            yAxes: [
+              {
+                ticks: {
+                  beginAtZero: true,
+                  stepSize: 4,
+                  max: 24,
+                  fontColor: "#fff",
+                  fontSize: 16,
+                  fontStyle: "bold"
+                },
+                gridLines: {
+                  display: false,
+                  color: "#fff"
+                }
+              }
+            ]
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
